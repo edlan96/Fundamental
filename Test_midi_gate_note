@@ -1,0 +1,10 @@
+import("stdfaust.lib");
+import("rack.lib");
+
+gain = hslider("Volume [knob:2]",0.5,0,1,0.01) : si.smoo;
+synth(x) = os.sawtooth(x)*gain;
+
+process(pitch,gate) = synth(freq) * env <: _,_ with {
+    freq = cv_pitch2freq(pitch);
+    env = en.adsre(0.04,0.1,0.25,0.2,gate);
+};
